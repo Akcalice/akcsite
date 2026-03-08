@@ -298,15 +298,15 @@ export const defaultCmsContent: CmsContent = {
     testimonialsTitle: "Nos Avis clients",
     testimonials: [
       {
-        text: "AKConseil a su m'accompagner avec une grande justesse, a un moment ou j'avais besoin de recul et de clarte.",
-        name: "Charline",
-        sessions: "8 sessions",
+        text: "AKConseil a su m'accompagner avec une grande justesse, a un moment ou j'avais besoin de recul et de clarte.\nAccompagnement a la creation de mon entreprise.\nTres professionnelle.\nExplication claire.\nEtape par etape avec beaucoup de bienveillance.",
+        name: "Jeanne",
+        sessions: "4 sessions",
         stars: 5,
       },
       {
-        text: "Grace a l'accompagnement personnalise, j'ai pu retrouver confiance en moi et construire un projet professionnel solide.",
-        name: "Anna",
-        sessions: "7 sessions",
+        text: "Grace a l'accompagnement personnalise, j'ai pu retrouver confiance en moi et construire un projet professionnel solide. C'etait excellent !!!",
+        name: "Anne C.",
+        sessions: "10 sessions",
         stars: 5,
       },
       {
