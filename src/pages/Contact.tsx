@@ -4,12 +4,6 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useCmsContent } from "@/context/CmsContentContext";
 
-type FallbackState = {
-  mailto: string;
-  gmail: string;
-  plainText: string;
-};
-
 const Contact = () => {
   const { toast } = useToast();
   const { content } = useCmsContent();
@@ -17,57 +11,9 @@ const Contact = () => {
   const calendlyUrl = content.site.calendlyUrl;
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [fallbackState, setFallbackState] = useState<FallbackState | null>(null);
-
-  const buildFallbackState = () => {
-    const subjectText = `[Contact site] ${form.subject || "Nouveau message"}`;
-    const plainText = [
-      `Nom: ${form.name}`,
-      `Email: ${form.email}`,
-      "",
-      "Message:",
-      form.message,
-    ].join("\n");
-    const subject = encodeURIComponent(subjectText);
-    const body = encodeURIComponent(plainText);
-    const to = encodeURIComponent(content.site.contactEmail);
-    return {
-      mailto: `mailto:${content.site.contactEmail}?subject=${subject}&body=${body}`,
-      gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`,
-      plainText,
-    };
-  };
-
-  const activateFallback = (description: string) => {
-    const nextFallbackState = buildFallbackState();
-    setFallbackState(nextFallbackState);
-    toast({
-      title: "Envoi alternatif active",
-      description,
-    });
-  };
-
-  const onCopyFallback = async () => {
-    if (!fallbackState) {
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(fallbackState.plainText);
-      toast({
-        title: "Message copie",
-        description: "Le contenu a ete copie dans le presse-papiers.",
-      });
-    } catch {
-      toast({
-        title: "Copie impossible",
-        description: "Copiez le texte manuellement depuis le formulaire.",
-      });
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFallbackState(null);
     try {
       setIsSubmitting(true);
       const response = await fetch("/api/contact", {
@@ -78,32 +24,15 @@ const Contact = () => {
         body: JSON.stringify(form),
       });
 
-      if (!response.ok) {
-        const errorPayload = (await response.json().catch(() => ({}))) as {
-          error?: string;
-          fallback?: boolean;
-        };
-        const message =
-          typeof errorPayload.error === "string"
-            ? errorPayload.error
-            : page.form.errorDescription;
-        if (errorPayload.fallback) {
-          activateFallback(
-            "Le service email serveur n'est pas configure. Utilisez les boutons d'envoi juste en dessous.",
-          );
-          return;
-        }
-        throw new Error(message);
-      }
-
       const payload = (await response.json().catch(() => ({}))) as {
-        fallback?: boolean;
+        success?: boolean;
+        error?: string;
       };
-      if (payload.fallback) {
-        activateFallback(
-          "Le service email est indisponible temporairement. Utilisez les boutons d'envoi juste en dessous.",
+
+      if (!response.ok || !payload.success) {
+        throw new Error(
+          payload.error || page.form.errorDescription || "Envoi impossible pour le moment.",
         );
-        return;
       }
 
       toast({
@@ -112,11 +41,11 @@ const Contact = () => {
       });
       setForm({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
-      activateFallback(
-        error instanceof Error
-          ? `${error.message} Utilisez les boutons d'envoi juste en dessous.`
-          : "Une erreur est survenue. Utilisez les boutons d'envoi juste en dessous.",
-      );
+      toast({
+        title: page.form.errorTitle,
+        description:
+          error instanceof Error ? error.message : "Une erreur est survenue.",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -186,41 +115,10 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex items-center justify-center w-full px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-navy-light transition-colors"
+                className="inline-flex items-center justify-center w-full px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-navy-light transition-colors disabled:opacity-60"
               >
                 {isSubmitting ? "Envoi..." : page.form.submitLabel} <Send size={16} className="ml-2" />
               </button>
-
-              {fallbackState && (
-                <div className="rounded-xl border border-border bg-accent/40 px-4 py-3 text-sm text-muted-foreground">
-                  <p className="mb-3">
-                    Envoi direct indisponible pour le moment. Choisissez une option :
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <a
-                      href={fallbackState.mailto}
-                      className="inline-flex items-center px-3 py-2 rounded-full bg-primary text-primary-foreground text-xs font-semibold hover:bg-navy-light transition-colors"
-                    >
-                      Ouvrir ma messagerie
-                    </a>
-                    <a
-                      href={fallbackState.gmail}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center px-3 py-2 rounded-full bg-secondary text-secondary-foreground text-xs font-semibold hover:bg-secondary/90 transition-colors"
-                    >
-                      Ouvrir Gmail Web
-                    </a>
-                    <button
-                      type="button"
-                      onClick={() => void onCopyFallback()}
-                      className="inline-flex items-center px-3 py-2 rounded-full bg-secondary text-secondary-foreground text-xs font-semibold hover:bg-secondary/90 transition-colors"
-                    >
-                      Copier le message
-                    </button>
-                  </div>
-                </div>
-              )}
             </form>
 
             {/* Info */}
@@ -241,16 +139,11 @@ const Contact = () => {
                     {content.site.location}
                   </div>
                 </div>
-              </div>
-              <div className="bg-card rounded-2xl p-8">
-                <h3 className="font-display text-lg font-bold mb-3">{page.hoursTitle}</h3>
-                <p className="text-muted-foreground text-sm mb-2">{page.hoursWeekdays}</p>
-                <p className="text-muted-foreground text-sm">{page.hoursSaturday}</p>
                 <a
                   href={calendlyUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex mt-5 px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-navy-light transition-colors"
+                  className="inline-flex mt-8 px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-navy-light transition-colors"
                 >
                   Prendre RDV sur Calendly
                 </a>

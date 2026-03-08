@@ -1,67 +1,37 @@
-# AKC Growth Path
+# AKConseil - site vitrine
 
-Site vitrine React/TypeScript pour AKC Gestion Conseils.
-
-## Stack technique
-
-- Vite
-- React
-- TypeScript
-- Tailwind CSS
-- shadcn/ui
-
-## Lancer le projet en local
+## Lancer le projet
 
 ```bash
 npm install
 npm run dev
 ```
 
-Copiez aussi le fichier d'exemple des variables d'environnement si vous testez les APIs :
-
-```bash
-cp .env.example .env
-```
-
-## Vérifications avant mise en ligne
+## Build et tests
 
 ```bash
 npm run test
 npm run build
 ```
 
-## Déploiement
+## Formulaire de contact (envoi serveur)
 
-Le site est déployé sur Vercel depuis la branche `main`.
-Chaque push sur `main` déclenche un nouveau déploiement de production.
+Le formulaire appelle `POST /api/contact`.
 
-## Backoffice visuel securise
+Variables d'environnement Vercel a definir :
 
-Acces admin :
+- `RESEND_API_KEY` (obligatoire)
+- `RESEND_FROM_EMAIL` (recommande)
+- `CONTACT_TO_EMAIL` (recommande)
 
-- `/admin-login` : portail de connexion (email + mot de passe)
-- `/admin-dashboard` : dashboard backoffice
-- `/?edit=1` : editeur visuel au survol (apres connexion)
+## Login admin temporaire
 
-Le contenu edite est sauvegarde via `/api/cms-content` puis publie vers GitHub.
+Routes :
 
-### Variables d'environnement Vercel pour le backoffice
+- `/admin-login`
+- `/admin-dashboard` (protege)
 
-- `ADMIN_LOGIN_EMAIL` : email autorise pour la connexion admin.
-- `ADMIN_LOGIN_PASSWORD` : mot de passe admin.
-- `ADMIN_AUTH_SECRET` : secret de signature des sessions admin.
-- `CMS_GITHUB_TOKEN` : token GitHub avec permission d'ecriture sur le repository.
-- `CMS_GITHUB_OWNER` : proprietaire GitHub du repository (ex: `Akcalice`).
-- `CMS_GITHUB_REPO` : nom du repository (ex: `akcsite`).
-- `CMS_GITHUB_BRANCH` : branche cible pour publier le contenu (ex: `main`).
-- `CMS_CONTENT_FILE_PATH` : chemin du fichier de contenu (par defaut `cms-content.json`).
+Identifiants temporaires par defaut :
 
-## Envoi des messages du formulaire de contact
-
-Le formulaire envoie les messages vers l'API `/api/contact`, puis vers l'email de destination.
-
-### Variables d'environnement Vercel pour l'email
-
-- `RESEND_API_KEY` : clé API Resend.
-- `RESEND_FROM_EMAIL` : email expéditeur vérifié dans Resend.
-- `CONTACT_TO_EMAIL` : email de réception des demandes de contact.
+- Email : `admin@akconseil.fr`
+- Mot de passe : `AKC-Temp-2026!`
