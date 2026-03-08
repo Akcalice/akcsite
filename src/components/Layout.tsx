@@ -1,35 +1,68 @@
 import { ReactNode, useEffect } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import Seo from "./Seo";
 import { useCmsContent } from "@/context/CmsContentContext";
 import { useLocation } from "react-router-dom";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const { content } = useCmsContent();
   const location = useLocation();
+  const isBlogRoute = location.pathname === "/blog" || location.pathname.startsWith("/blog/");
+
+  const pageSeoMap: Record<string, { title: string; description: string }> = {
+    "/": {
+      title: `${content.site.companyName} | Accompagnement educatif, social et professionnel`,
+      description: content.site.defaultMetaDescription,
+    },
+    "/a-propos": {
+      title: `A Propos | ${content.site.companyName}`,
+      description:
+        "Decouvrez l'expertise de AKConseil : accompagnement humain et sur-mesure avec plus de 25 ans d'experience.",
+    },
+    "/services": {
+      title: `Services | ${content.site.companyName}`,
+      description:
+        "Explorez les services AKConseil : accompagnement educatif, insertion & orientation, coaching professionnel.",
+    },
+    "/accompagnement": {
+      title: `Accompagnement | ${content.site.companyName}`,
+      description:
+        "Nos poles d'accompagnement educatif, insertion et professionnel pour vous aider a avancer avec clarte.",
+    },
+    "/prix": {
+      title: `Tarifs | ${content.site.companyName}`,
+      description:
+        "Consultez les tarifs et forfaits AKConseil : seances individuelles, accompagnements et ateliers sur-mesure.",
+    },
+    "/rendez-vous": {
+      title: `Prendre rendez-vous | ${content.site.companyName}`,
+      description:
+        "Reservez votre rendez-vous avec AKConseil pour demarrer un accompagnement adapte a votre situation.",
+    },
+    "/contact": {
+      title: `Contact | ${content.site.companyName}`,
+      description:
+        "Contactez AKConseil pour toute question sur nos accompagnements educatifs, sociaux et professionnels.",
+    },
+  };
+
+  const seoData = pageSeoMap[location.pathname] ?? {
+    title: content.site.tabTitle,
+    description: content.site.defaultMetaDescription,
+  };
+
+  const organizationStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: content.site.companyName,
+    url: "https://akconseil.fr",
+    logo: "https://akconseil.fr/logo-akc.svg",
+    email: content.site.contactEmail,
+  };
 
   useEffect(() => {
-    const isBlogRoute =
-      location.pathname === "/blog" || location.pathname.startsWith("/blog/");
-
-    if (!isBlogRoute) {
-      document.title = content.site.tabTitle;
-    }
-
-    const currentDescription = document
-      .querySelector('meta[name="description"]')
-      ?.getAttribute("content");
-    if (!currentDescription) {
-      let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-      if (!meta) {
-        meta = document.createElement("meta");
-        meta.setAttribute("name", "description");
-        document.head.appendChild(meta);
-      }
-      meta.setAttribute("content", content.site.defaultMetaDescription);
-    }
-
-    const faviconPath = "/favicon-akconseil.svg";
+    const faviconPath = content.site.faviconPath || "/favicon-akconseil.svg";
 
     let icon = document.querySelector('link[rel="icon"]') as HTMLLinkElement | null;
     if (!icon) {
@@ -41,12 +74,28 @@ const Layout = ({ children }: { children: ReactNode }) => {
     icon.href = `${faviconPath}${faviconPath.includes("?") ? "&" : "?"}v=11`;
   }, [
     location.pathname,
-    content.site.tabTitle,
-    content.site.defaultMetaDescription,
+    content.site.faviconPath,
   ]);
 
   return (
     <div className="min-h-screen flex flex-col">
+      {!isBlogRoute && (
+        <Seo
+          title={seoData.title}
+          description={seoData.description}
+          canonicalPath={location.pathname}
+          image={content.site.ogImage}
+          type="website"
+          keywords={[
+            "AKConseil",
+            "accompagnement educatif",
+            "insertion professionnelle",
+            "orientation",
+            "coaching professionnel",
+          ]}
+          structuredData={organizationStructuredData}
+        />
+      )}
       <Navbar />
       <main className="flex-1 pt-16 md:pt-20">{children}</main>
       <Footer />

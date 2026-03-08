@@ -620,7 +620,7 @@ export const defaultCmsContent: CmsContent = {
   },
   blog: {
     badge: "Blog",
-    listingTitle: "Nos 3 articles de reference",
+    listingTitle: "Nos articles de reference",
     listingDescription:
       "Des contenus utiles et actionnables pour progresser sur les sujets educatifs, l'insertion professionnelle et l'accompagnement en entreprise.",
     seoTitle: "Blog AKConseil | Conseils educatifs, insertion et coaching",
