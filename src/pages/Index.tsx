@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import booksHero from "@/assets/books-hero.jpg";
 import communitySunset from "@/assets/community-sunset.jpg";
-import coachingSession from "@/assets/coaching-session.jpg";
-import familySupport from "@/assets/family-support.jpg";
+import drawingEducation from "@/assets/drawing-education.svg";
+import drawingInsertion from "@/assets/drawing-insertion.svg";
 import { GraduationCap, Users, Briefcase, ArrowRight, Star, ChevronRight } from "lucide-react";
 import {
   Accordion,
@@ -17,13 +17,13 @@ const services = [
     icon: GraduationCap,
     title: "Accompagnement éducatif",
     description: "Orientation, écoute attentive et soutien dans la gestion de situations complexes : éducation, développement personnel et équilibre familial.",
-    image: familySupport,
+    image: drawingEducation,
   },
   {
     icon: Users,
     title: "Insertion & orientation",
     description: "Ateliers ciblés et temps d'échange pour définir un projet clair, valoriser vos compétences et reprendre confiance en votre parcours.",
-    image: coachingSession,
+    image: drawingInsertion,
   },
   {
     icon: Briefcase,
@@ -103,12 +103,6 @@ const Index = () => (
           <Link to="/services" className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-secondary text-secondary-foreground font-semibold hover:bg-cream-dark transition-colors">
             Découvrir nos services <ChevronRight size={18} className="ml-1" />
           </Link>
-        </div>
-      </div>
-      {/* Book images - side aligned */}
-      <div className="container relative pb-10 md:pb-16">
-        <div className="rounded-2xl overflow-hidden shadow-lg max-w-md ml-0">
-          <img src={booksHero} alt="Livres ouverts symbolisant le savoir et l'accompagnement" className="w-full h-40 md:h-56 object-cover" loading="lazy" />
         </div>
       </div>
     </section>

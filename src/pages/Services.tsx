@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
-import illusEducation from "@/assets/illus-education.jpg";
-import illusInsertion from "@/assets/illus-insertion.jpg";
+import drawingEducation from "@/assets/drawing-education.svg";
+import drawingInsertion from "@/assets/drawing-insertion.svg";
 import illusCoaching from "@/assets/illus-coaching.jpg";
 import { GraduationCap, Users, Briefcase, Building2, User, ArrowRight } from "lucide-react";
 
@@ -11,14 +11,14 @@ const servicesData = [
     title: "Accompagnement éducatif",
     description: "Orientation, écoute attentive et soutien dans la gestion de situations complexes : éducation, développement personnel et équilibre familial.",
     forWho: "Parents, familles, jeunes",
-    image: illusEducation,
+    image: drawingEducation,
   },
   {
     icon: Users,
     title: "Insertion & orientation professionnelle",
     description: "Ateliers ciblés, bilans de compétences et temps d'échange pour définir un projet clair, valoriser vos compétences et reprendre confiance.",
     forWho: "Personnes en reconversion, demandeurs d'emploi",
-    image: illusInsertion,
+    image: drawingInsertion,
   },
   {
     icon: Briefcase,

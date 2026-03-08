@@ -68,35 +68,15 @@ const Contact = () => {
     setFallbackState(null);
     try {
       setIsSubmitting(true);
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-
-      const payload = (await response.json().catch(() => ({}))) as {
-        fallback?: boolean;
-        error?: string;
-      };
-
-      if (!response.ok || payload.fallback) {
-        activateFallback(
-          payload.error ||
-            "Le service email serveur est indisponible. Utilisez l'envoi via votre messagerie.",
-        );
-        return;
-      }
-
-      toast({
-        title: "Message envoye !",
-        description: "Nous vous repondrons dans les meilleurs delais.",
-      });
-      setForm({ name: "", email: "", subject: "", message: "" });
-    } catch {
       activateFallback(
-        "Une erreur est survenue. Utilisez l'envoi via votre messagerie.",
+        "Ouverture de votre messagerie pour envoyer le message.",
+      );
+      setForm({ name: "", email: "", subject: "", message: "" });
+    } catch (error) {
+      activateFallback(
+        error instanceof Error
+          ? error.message
+          : "Une erreur est survenue. Utilisez l'envoi via votre messagerie.",
       );
     } finally {
       setIsSubmitting(false);
