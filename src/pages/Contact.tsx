@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import { Mail, MapPin, Send } from "lucide-react";
+import { Instagram, Linkedin, Mail, MapPin, Send } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useCmsContent } from "@/context/CmsContentContext";
@@ -9,6 +9,8 @@ const Contact = () => {
   const { content } = useCmsContent();
   const page = content.contactPage;
   const calendlyUrl = content.site.calendlyUrl;
+  const instagramUrl = content.site.instagramUrl?.trim();
+  const linkedinUrl = content.site.linkedinUrl?.trim();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -175,6 +177,50 @@ const Contact = () => {
                       <MapPin size={18} className="text-foreground" />
                     </div>
                     {content.site.location}
+                  </div>
+                  <div className="flex items-center gap-3 text-sm">
+                    {instagramUrl ? (
+                      <a
+                        href={instagramUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 hover:text-navy-light transition-colors"
+                        aria-label="Instagram"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-gold-light flex items-center justify-center">
+                          <Instagram size={18} className="text-foreground" />
+                        </div>
+                        Instagram
+                      </a>
+                    ) : (
+                      <span className="inline-flex items-center gap-2 opacity-60">
+                        <div className="w-10 h-10 rounded-full bg-gold-light flex items-center justify-center">
+                          <Instagram size={18} className="text-foreground" />
+                        </div>
+                        Instagram
+                      </span>
+                    )}
+                    {linkedinUrl ? (
+                      <a
+                        href={linkedinUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 hover:text-navy-light transition-colors"
+                        aria-label="LinkedIn"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-gold-light flex items-center justify-center">
+                          <Linkedin size={18} className="text-foreground" />
+                        </div>
+                        LinkedIn
+                      </a>
+                    ) : (
+                      <span className="inline-flex items-center gap-2 opacity-60">
+                        <div className="w-10 h-10 rounded-full bg-gold-light flex items-center justify-center">
+                          <Linkedin size={18} className="text-foreground" />
+                        </div>
+                        LinkedIn
+                      </span>
+                    )}
                   </div>
                 </div>
                 <a

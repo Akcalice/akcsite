@@ -676,6 +676,22 @@ const PageBuilder = () => {
               </label>
 
               <label className="space-y-1">
+                <span className="text-xs font-semibold">Logo du site (URL ou /fichier)</span>
+                <input
+                  value={draft.site.logoPath}
+                  onChange={(event) =>
+                    updateDraft((previous) => {
+                      const next = cloneContent(previous);
+                      next.site.logoPath = event.target.value.trim();
+                      return next;
+                    })
+                  }
+                  className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm"
+                  placeholder="/logo-akc.svg"
+                />
+              </label>
+
+              <label className="space-y-1">
                 <span className="text-xs font-semibold">Lien Instagram</span>
                 <input
                   value={draft.site.instagramUrl}
