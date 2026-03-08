@@ -9,7 +9,7 @@ const mainFavicon =
   (document.createElement("link") as HTMLLinkElement);
 mainFavicon.setAttribute("rel", "icon");
 mainFavicon.setAttribute("type", "image/x-icon");
-mainFavicon.href = "/favicon.ico?v=13";
+mainFavicon.href = "/favicon.ico?v=14";
 if (!mainFavicon.parentElement) {
   document.head.appendChild(mainFavicon);
 }

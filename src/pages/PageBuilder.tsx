@@ -256,7 +256,75 @@ const PageBuilder = () => {
           </div>
 
           <div className="rounded-2xl border border-border bg-card p-6 space-y-4">
-            <h2 className="font-display text-2xl font-semibold">2) Temoignages (dont etoiles)</h2>
+            <h2 className="font-display text-2xl font-semibold">2) Liens section Prix</h2>
+            <p className="text-sm text-muted-foreground">
+              Modifiez ici les liens des boutons de la page Prix (interne ou URL externe).
+            </p>
+
+            <div className="space-y-3">
+              {draft.pricingPage.plans.map((plan, index) => (
+                <div key={`${plan.title}-${index}`} className="rounded-xl border border-border p-4 space-y-3">
+                  <p className="text-sm font-semibold">{plan.title}</p>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <input
+                      value={plan.ctaLabel}
+                      onChange={(event) =>
+                        updateDraft((previous) => {
+                          const next = cloneContent(previous);
+                          next.pricingPage.plans[index].ctaLabel = event.target.value;
+                          return next;
+                        })
+                      }
+                      className="px-3 py-2 rounded-lg border border-border bg-background text-sm"
+                      placeholder="Texte du bouton"
+                    />
+                    <input
+                      value={plan.ctaLink}
+                      onChange={(event) =>
+                        updateDraft((previous) => {
+                          const next = cloneContent(previous);
+                          next.pricingPage.plans[index].ctaLink = event.target.value.trim();
+                          return next;
+                        })
+                      }
+                      className="px-3 py-2 rounded-lg border border-border bg-background text-sm"
+                      placeholder="Lien du bouton (https://... ou /contact)"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-3">
+              <input
+                value={draft.pricingPage.ctaLabel}
+                onChange={(event) =>
+                  updateDraft((previous) => {
+                    const next = cloneContent(previous);
+                    next.pricingPage.ctaLabel = event.target.value;
+                    return next;
+                  })
+                }
+                className="px-3 py-2 rounded-lg border border-border bg-background text-sm"
+                placeholder="Texte du bouton final"
+              />
+              <input
+                value={draft.pricingPage.ctaLink}
+                onChange={(event) =>
+                  updateDraft((previous) => {
+                    const next = cloneContent(previous);
+                    next.pricingPage.ctaLink = event.target.value.trim();
+                    return next;
+                  })
+                }
+                className="px-3 py-2 rounded-lg border border-border bg-background text-sm"
+                placeholder="Lien du bouton final (https://... ou /contact)"
+              />
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-6 space-y-4">
+            <h2 className="font-display text-2xl font-semibold">3) Temoignages (dont etoiles)</h2>
             <div className="space-y-4">
               {draft.home.testimonials.map((testimonial, index) => (
                 <div key={`${testimonial.name}-${index}`} className="rounded-xl border border-border p-4 space-y-3">
@@ -353,7 +421,7 @@ const PageBuilder = () => {
           </div>
 
           <div className="rounded-2xl border border-border bg-card p-6 space-y-4">
-            <h2 className="font-display text-2xl font-semibold">3) Redaction articles de blog</h2>
+            <h2 className="font-display text-2xl font-semibold">4) Redaction articles de blog</h2>
             <div className="grid lg:grid-cols-[280px_minmax(0,1fr)] gap-5">
               <aside className="space-y-2">
                 {draft.blog.posts.map((post, index) => (
@@ -617,7 +685,7 @@ const PageBuilder = () => {
 
           <div className="rounded-2xl border border-border bg-card p-6 space-y-5">
             <h2 className="font-display text-2xl font-semibold">
-              4) SEO Google (titre, description, URL)
+              5) SEO Google (titre, description, URL)
             </h2>
             <p className="text-sm text-muted-foreground">
               Ces champs influencent l'affichage de votre site sur Google (titre, description,
@@ -669,7 +737,7 @@ const PageBuilder = () => {
                     })
                   }
                   className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm"
-                  placeholder="/logo-akc.svg"
+                  placeholder="/logo-akc-new.svg"
                 />
               </label>
 
@@ -783,7 +851,7 @@ const PageBuilder = () => {
                     })
                   }
                   className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm"
-                  placeholder="/logo-akc.svg"
+                  placeholder="/logo-akc-new.svg"
                 />
               </label>
             </div>

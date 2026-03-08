@@ -78,7 +78,7 @@ const EditableImage = ({
       {isEditing && (
         <div className="absolute top-full left-0 mt-2 z-[60] w-[min(92vw,430px)] rounded-xl border border-border bg-background shadow-xl p-3 space-y-2">
           <p className="text-xs text-muted-foreground">
-            Entrez une URL complete ou un chemin local (ex: /logo-akc.svg).
+            Entrez une URL complete ou un chemin local (ex: /logo-akc-new.svg).
           </p>
           <input
             value={draftSrc}

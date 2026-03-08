@@ -45,8 +45,19 @@ const deepMerge = <T,>(base: T, override: unknown): T => {
   return (override ?? base) as T;
 };
 
-const mergeWithDefaults = (remoteContent: unknown) =>
-  deepMerge(defaultCmsContent, remoteContent) as CmsContent;
+const mergeWithDefaults = (remoteContent: unknown) => {
+  const merged = deepMerge(defaultCmsContent, remoteContent) as CmsContent;
+
+  // Migrate legacy logo path to the latest logo asset.
+  if (!merged.site.logoPath || merged.site.logoPath === "/logo-akc.svg") {
+    merged.site.logoPath = "/logo-akc-new.svg";
+  }
+  if (!merged.site.ogImage || merged.site.ogImage === "/logo-akc.svg") {
+    merged.site.ogImage = "/logo-akc-new.svg";
+  }
+
+  return merged;
+};
 
 export const CmsContentProvider = ({ children }: { children: ReactNode }) => {
   const [content, setContent] = useState<CmsContent>(defaultCmsContent);

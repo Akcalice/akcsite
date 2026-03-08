@@ -11,7 +11,7 @@ const APropos = () => {
   const { content } = useCmsContent();
   const about = content.about;
   const calendlyUrl = content.site.calendlyUrl;
-  const siteLogoPath = content.site.logoPath || "/logo-akc.svg";
+  const siteLogoPath = content.site.logoPath || "/logo-akc-new.svg";
   const normalizedPortraitKey =
     about.portraitImageKey === "consultantPortrait" ? siteLogoPath : about.portraitImageKey;
   const portraitImage = resolveImageSrc(normalizedPortraitKey, siteLogoPath);

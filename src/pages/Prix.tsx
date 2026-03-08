@@ -6,6 +6,7 @@ import { useCmsContent } from "@/context/CmsContentContext";
 const Prix = () => {
   const { content } = useCmsContent();
   const page = content.pricingPage;
+  const isBottomExternalCta = /^https?:\/\//.test(page.ctaLink);
 
   return (
     <Layout>
@@ -83,9 +84,20 @@ const Prix = () => {
         <p className="text-muted-foreground text-lg mb-8 max-w-lg mx-auto">
           {page.ctaDescription}
         </p>
-        <Link to="/contact" className="inline-flex items-center px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-navy-light transition-colors">
-          {page.ctaLabel} <ArrowRight size={18} className="ml-2" />
-        </Link>
+        {isBottomExternalCta ? (
+          <a
+            href={page.ctaLink}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-navy-light transition-colors"
+          >
+            {page.ctaLabel} <ArrowRight size={18} className="ml-2" />
+          </a>
+        ) : (
+          <Link to={page.ctaLink} className="inline-flex items-center px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-navy-light transition-colors">
+            {page.ctaLabel} <ArrowRight size={18} className="ml-2" />
+          </Link>
+        )}
       </div>
     </section>
   </Layout>

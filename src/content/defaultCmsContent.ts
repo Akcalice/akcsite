@@ -135,6 +135,7 @@ export type CmsContent = {
     ctaTitle: string;
     ctaDescription: string;
     ctaLabel: string;
+    ctaLink: string;
   };
   rendezVousPage: {
     badge: string;
@@ -200,8 +201,8 @@ export const defaultCmsContent: CmsContent = {
     defaultMetaDescription:
       "AKConseil : accompagnement educatif, social et professionnel sur-mesure.",
     siteUrl: "https://akconseil.fr",
-    ogImage: "/logo-akc.svg",
-    logoPath: "/logo-akc.svg",
+    ogImage: "/logo-akc-new.svg",
+    logoPath: "/logo-akc-new.svg",
     faviconPath: "/favicon.ico",
     calendlyUrl: "https://calendly.com/contact-akconseil/appel-d-offre",
     contactEmail: "contact@akconseil.fr",
@@ -362,7 +363,7 @@ export const defaultCmsContent: CmsContent = {
     paragraph2:
       "Ma philosophie : Aller au rythme de la personne accompagnee. Chaque parcours est unique, et mon approche humaine et personnalisee permet a chacun de devenir acteur de son evolution. Je travaille aupres des femmes, des familles, des jeunes et des structures professionnelles pour offrir un accompagnement complet et bienveillant.",
     ctaLabel: "Prendre Rendez-vous",
-    portraitImageKey: "/logo-akc.svg",
+    portraitImageKey: "/logo-akc-new.svg",
     methodologyTitle: "Ma methodologie",
     methodologyParagraph1:
       "Mon approche repose sur l'ecoute active, l'analyse de la situation globale et la co-construction de solutions adaptees. Je combine formations, ateliers pratiques et conseils personnalises.",
@@ -536,6 +537,7 @@ export const defaultCmsContent: CmsContent = {
     ctaDescription:
       "Contactez-nous pour un devis sur-mesure adapte a vos besoins specifiques.",
     ctaLabel: "Contactez-nous",
+    ctaLink: "/contact",
   },
   rendezVousPage: {
     badge: "Prise de Rendez-vous",

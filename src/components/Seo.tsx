@@ -81,7 +81,7 @@ const Seo = ({
   description,
   canonicalPath = "/",
   baseUrl,
-  image = "/logo-akc.svg",
+  image = "/logo-akc-new.svg",
   type = "website",
   keywords = [],
   noindex = false,
