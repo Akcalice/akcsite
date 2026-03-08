@@ -64,12 +64,12 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     };
 
     let dbId: string | null = null;
-    const mongoUri = process.env.MONGODB_URI;
+    const mongoUri = process.env.MONGODB_URI?.trim();
     if (mongoUri) {
       const client = await MongoClient.connect(mongoUri);
       try {
-        const dbName = process.env.MONGODB_DB || "akconseil";
-        const collection = process.env.MONGODB_COLLECTION || "contact_submissions";
+        const dbName = process.env.MONGODB_DB?.trim() || "akconseil";
+        const collection = process.env.MONGODB_COLLECTION?.trim() || "contact_submissions";
         const db = client.db(dbName);
         const result = await db.collection(collection).insertOne(submission);
         dbId = result.insertedId.toString();
@@ -98,11 +98,17 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
       <p>Cordialement,<br/>AKConseil</p>
     `;
 
-    const smtpHost = process.env.SMTP_HOST;
-    const smtpUser = process.env.SMTP_USER;
+    const smtpHost = process.env.SMTP_HOST?.trim();
+    const smtpUser = process.env.SMTP_USER?.trim();
     const smtpPassword = process.env.SMTP_PASSWORD;
-    const smtpFrom = process.env.SMTP_FROM || process.env.RESEND_FROM_EMAIL || "AKConseil <onboarding@resend.dev>";
-    const notificationEmail = process.env.NOTIFICATION_EMAIL || process.env.CONTACT_TO_EMAIL || "contact@akconseil.fr";
+    const smtpFrom =
+      process.env.SMTP_FROM?.trim() ||
+      process.env.RESEND_FROM_EMAIL?.trim() ||
+      "AKConseil <onboarding@resend.dev>";
+    const notificationEmail =
+      process.env.NOTIFICATION_EMAIL?.trim() ||
+      process.env.CONTACT_TO_EMAIL?.trim() ||
+      "contact@akconseil.fr";
 
     if (smtpHost && smtpUser && smtpPassword) {
       const transporter = nodemailer.createTransport({
@@ -133,7 +139,7 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
       return res.status(200).json({ success: true, id: dbId });
     }
 
-    const resendApiKey = process.env.RESEND_API_KEY;
+    const resendApiKey = process.env.RESEND_API_KEY?.trim();
     if (!resendApiKey) {
       return res.status(500).json({
         error:
@@ -152,7 +158,13 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     });
 
     if (notification.error) {
-      return res.status(502).json({ error: notification.error.message || "Echec d'envoi de l'email de notification." });
+      const message =
+        notification.error.message || "Echec d'envoi de l'email de notification.";
+      const lower = message.toLowerCase();
+      const normalizedMessage = lower.includes("api key")
+        ? "RESEND_API_KEY invalide ou mal copiee. Verifiez la variable Vercel (sans espace, scope Production)."
+        : message;
+      return res.status(502).json({ error: normalizedMessage });
     }
 
     const confirmation = await resend.emails.send({
@@ -164,7 +176,13 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     });
 
     if (confirmation.error) {
-      return res.status(502).json({ error: confirmation.error.message || "Echec d'envoi de l'email de confirmation." });
+      const message =
+        confirmation.error.message || "Echec d'envoi de l'email de confirmation.";
+      const lower = message.toLowerCase();
+      const normalizedMessage = lower.includes("api key")
+        ? "RESEND_API_KEY invalide ou mal copiee. Verifiez la variable Vercel (sans espace, scope Production)."
+        : message;
+      return res.status(502).json({ error: normalizedMessage });
     }
 
     return res.status(200).json({

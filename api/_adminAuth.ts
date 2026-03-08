@@ -102,7 +102,11 @@ export const parseCookies = (req: ApiRequest) => {
     }
     const name = rawName.trim();
     const value = rawValueParts.join("=").trim();
-    cookieMap[name] = decodeURIComponent(value);
+    try {
+      cookieMap[name] = decodeURIComponent(value);
+    } catch {
+      cookieMap[name] = value;
+    }
   });
 
   return cookieMap;
@@ -120,11 +124,11 @@ export const buildBaseUrl = (req: ApiRequest) => {
 };
 
 export const getAdminAuthConfig = () => {
-  const adminEmail = process.env.ADMIN_LOGIN_EMAIL;
+  const adminEmail = process.env.ADMIN_LOGIN_EMAIL?.trim();
   const adminPassword = process.env.ADMIN_LOGIN_PASSWORD;
-  const secret = process.env.ADMIN_AUTH_SECRET;
-  const resendApiKey = process.env.RESEND_API_KEY;
-  const resendFromEmail = process.env.RESEND_FROM_EMAIL;
+  const secret = process.env.ADMIN_AUTH_SECRET?.trim();
+  const resendApiKey = process.env.RESEND_API_KEY?.trim();
+  const resendFromEmail = process.env.RESEND_FROM_EMAIL?.trim();
 
   return {
     adminEmail,
